@@ -12,12 +12,17 @@ void crear(nodo *&);
 void preorden(const nodo *);
 void inorden(const nodo *);
 void postorden(const nodo *);
+int contHojas(const nodo *, int &);
+void mostrarHojas(const nodo *);
+int contNodosInt(const nodo *, int &);
+void mostrarNodosInt(const nodo *);
 
 int main()
 {
     // ios::sync_with_stdio(0);
     // cin.tie(0);
     nodo *raiz = new nodo;
+    int contH = 0, contNI = 0;
 
     crear(raiz);
     cout << "\n\nRecorrido preorden\n";
@@ -28,6 +33,14 @@ int main()
 
     cout << "\n\nRecorrido postorden\n";
     postorden(raiz);
+
+    cout << "\n\nTiene: " << contHojas(raiz, contH) << " hojas\n";
+    cout << "\nLas hojas son:\n";
+    mostrarHojas(raiz);
+
+    cout << "\n\nTiene: " << contNodosInt(raiz, contNI) << " nodos internos\n";
+    cout << "\nLos nodos internos son:\n";
+    mostrarNodosInt(raiz);
 
     return 0;
 }
@@ -96,5 +109,65 @@ void postorden(const nodo *raiz)
         postorden(raiz->izq);
         postorden(raiz->der);
         cout << raiz->inf << " ";
+    }
+}
+
+int contHojas(const nodo *raiz, int &cont)
+{
+    if (raiz != nullptr)
+    {
+        if (raiz->izq == nullptr && raiz->der == nullptr)
+        {
+            cont++;
+            return cont;
+        }
+        else
+        {
+            contHojas(raiz->izq, cont);
+            contHojas(raiz->der, cont);
+        }
+    }
+    else
+        return cont;
+}
+
+void mostrarHojas(const nodo *raiz)
+{
+    if (raiz != nullptr)
+    {
+        if (raiz->izq == nullptr && raiz->der == nullptr)
+            cout << raiz->inf << " ";
+        else
+        {
+            mostrarHojas(raiz->der);
+            mostrarHojas(raiz->izq);
+        }
+    }
+}
+
+int contNodosInt(const nodo *raiz, int &cont)
+{
+    if (raiz != nullptr)
+    {
+        if (raiz->izq != nullptr || raiz->der != nullptr)
+        {
+            cont++;
+            contNodosInt(raiz->der, cont);
+            contNodosInt(raiz->izq, cont);
+            return cont;
+        }
+    }
+}
+
+void mostrarNodosInt(const nodo *raiz)
+{
+    if (raiz != nullptr)
+    {
+        if (raiz->izq != nullptr || raiz->der != nullptr)
+        {
+            cout << raiz->inf << " ";
+            mostrarNodosInt(raiz->der);
+            mostrarNodosInt(raiz->izq);
+        }
     }
 }
